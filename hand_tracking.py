@@ -27,10 +27,20 @@ HAND_CONNECTIONS = [
     (0,17)
 ]
 
+hands_position = {
+        "left": None,
+        "right":None
+}
 points = []
 
 def tracking_hands():
     while True:
+
+        hands_position = {
+        "left": None,
+        "right":None
+}
+
 
         frame , frame_rgb = cam.return_frame()
 
@@ -60,7 +70,7 @@ def tracking_hands():
 
                     cv2.circle(frame,(x,y),5,(90,0,180),-1)
 
-                    print(label)
+                    # print(label)
  
                 # draw connections
                 for connection in HAND_CONNECTIONS:
@@ -69,27 +79,31 @@ def tracking_hands():
 
                     cv2.line(frame,start,end,(100,100,200),2)
 
+                if label == "Right":
+                    hands_position["right"] = fill_data(points)
+                if label == "Left":
+                    hands_position["left"] = fill_data(points)
         cv2.imshow("Hand Tracking", frame)
+        # print(hands_position)
 
-# hand -> left -> fingers -> dump -> tip = x,y
+
 def hands_json():
-    if len(points >= 21):
-        return {
-            "hand": {
-                "left": {
-                    "wrist ": points[0],
-                    "fingers": {
-                        "dump":list(points[1:4]),
-                        "index":list(points[5:8]),
-                        "middle":list(points[9:12]),
-                        "ring":list(points[13:16]),
-                        "pinky":list(points[17:20])
-                        }
+    if hands_position["left"] != None:
+        return hands_position, "left"
+    elif hands_position["right"] != None:
+        return hands_position, "right"
+    elif hands_position["right"] != None and hands_position["left"] != None:
+        return hands_position, "left-right"
+    return None, ""
+    
+# hand -> left -> fingers -> thump -> tip = x,y
+def fill_data(points):
+    return {"wrist": points[0],
+            "fingers": {
+                "thumb":points[1:5],
+                "index":points[5:9],
+                "middle":points[9:13],
+                "ring":points[13:17],
+                "pinky":points[17:21]
                     }
-                },
-                "right":{
-                    
-                } 
-            }
-    else:
-        print("Hand not detected")
+                }

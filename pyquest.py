@@ -1,7 +1,6 @@
-from hand_tracking import tracking_hands
+from hand_tracking import tracking_hands, hands_json
 import threading
-from cam import return_frame
-import cv2
+import gestures
 
 cam_thread = threading.Thread(target=tracking_hands)
 
