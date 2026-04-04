@@ -84,26 +84,33 @@ def tracking_hands():
                 if label == "Left":
                     hands_position["left"] = fill_data(points)
         cv2.imshow("Hand Tracking", frame)
-        # print(hands_position)
+        
 
 
-def hands_json():
-    if hands_position["left"] != None:
+def hands_to_json():
+    global hands_position
+    if hands_position["right"] != None and hands_position["left"] != None:
+        return hands_position, "left-right"
+    elif hands_position["left"] != None:
         return hands_position, "left"
     elif hands_position["right"] != None:
         return hands_position, "right"
-    elif hands_position["right"] != None and hands_position["left"] != None:
-        return hands_position, "left-right"
     return None, ""
-    
-# hand -> left -> fingers -> thump -> tip = x,y
+
 def fill_data(points):
     return {"wrist": points[0],
             "fingers": {
-                "thumb":points[1:5],
-                "index":points[5:9],
-                "middle":points[9:13],
-                "ring":points[13:17],
-                "pinky":points[17:21]
+                "thumb":fill_fingers_points(points[1:5]),
+                "index":fill_fingers_points(points[5:9]),
+                "middle":fill_fingers_points(points[9:13]),
+                "ring":fill_fingers_points(points[13:17]),
+                "pinky":fill_fingers_points(points[17:21])
                     }
                 }
+def fill_fingers_points(points):
+    return{
+        "mcp":points[0],
+        "pip":points[1],
+        "dip":points[2],
+        "tip":points[3]
+    }

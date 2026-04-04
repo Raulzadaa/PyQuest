@@ -1,4 +1,4 @@
-from hand_tracking import tracking_hands, hands_json
+from hand_tracking import tracking_hands
 import threading
 import gestures
 

@@ -1,9 +1,9 @@
-from hand_tracking import hands_json
+from hand_tracking import hands_to_json
 
-hand , side = hands_json()
+hand_json , side = hands_to_json()
 
 def up_index():
-    if "right" in side:
-        if hand["right"]["fingers"]["index"][3][1] > hand["right"]["fingers"]["index"][2][1]:
+    # print("entrou na funcao", side)
+    if (side != ""):
+        if hand_json[side]["fingers"]["index"]["tip"][1] > hand_json["right"]["fingers"]["index"]["dip"][1]:
             return True
-        

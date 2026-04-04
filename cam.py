@@ -1,4 +1,5 @@
 import cv2
+from gestures import up_index
 
 cap = cv2.VideoCapture(1)
 
@@ -13,7 +14,7 @@ def return_frame():
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-    if cv2.waitKey(1) == 27:
+    if up_index:
             cap.release()
             cv2.destroyAllWindows()
 
